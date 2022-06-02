@@ -23,7 +23,7 @@ jobs:
       
     - name: Tag Docker Image
       run: |
-        docker tag worker:latest ghcr.io/plintron-microservices-org/vote:latest
+        docker tag vote:latest ghcr.io/plintron-microservices-org/vote:latest
 # ${{ github.repository_owner }}
     - name: Push Docker Image
       run: |
