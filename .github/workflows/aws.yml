@@ -35,9 +35,9 @@ jobs:
          version: 2  
       - run: aws eks --region us-east-2 update-kubeconfig --name eks-cluster
       
-      - name: create namespace
-      - uses: tale/kubectl-action@v1
+      - name: namespace
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-          kubectl-version: v1.22.0
-      - run: kubectl create namespace vote
+         args: create namespace vote
