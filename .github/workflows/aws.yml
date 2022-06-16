@@ -36,7 +36,7 @@ jobs:
       - run: aws eks --region us-east-2 update-kubeconfig --name eks-cluster
       
       - name: namespace
-      - uses: actions-hub/kubectl@master
+        uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
