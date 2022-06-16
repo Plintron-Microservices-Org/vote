@@ -32,4 +32,4 @@ jobs:
           uses: unfor19/install-aws-cli-action@master
           with:
            version: latest 
-            - run:aws eks --region us-east-2 update-kubeconfig --name eks-cluster
+        - run: aws eks --region us-east-2 update-kubeconfig --name eks-cluster
