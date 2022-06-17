@@ -34,5 +34,5 @@ jobs:
         with:
          version: 2  
       - run: aws eks --region us-east-2 update-kubeconfig --name eks-cluster
-      - run: kubectl create namespace vote
+      # - run: kubectl create namespace vote
       - run: kubectl apply -f /k8s-specifications/
