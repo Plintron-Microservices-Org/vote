@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/Plintron-Microservices-Org/vote.git
     targetRevision: HEAD
-    path: dev
+    path: k8s-specifications
   destination: 
     server: https://kubernetes.default.svc
     namespace: myapp
