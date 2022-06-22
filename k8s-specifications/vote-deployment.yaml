@@ -2,24 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: result
-  name: result
+    app: vote
+  name: vote
   namespace: vote
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: result
+      app: vote
   template:
     metadata:
       labels:
-        app: result
+        app: vote
     spec:
       containers:
-      - image: ghcr.io/plintron-microservices-org/result
-        name: result
+      - image: ghcr.io/plintron-microservices-org/vote
+        name: vote
         ports:
         - containerPort: 80
-          name: result
+          name: vote
       imagePullSecrets:
         - name: docker-registry-secret
