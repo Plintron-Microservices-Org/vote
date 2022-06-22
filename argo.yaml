@@ -6,10 +6,13 @@ metadata:
 spec:
   project: default
 
+stringData:
   source:
     repoURL: https://github.com/Plintron-Microservices-Org/vote.git
     targetRevision: HEAD
     path: k8s-specifications
+    password: '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'
+    username: 'Nayana-Nagaraj'
   destination: 
     server: https://kubernetes.default.svc
     namespace: vote
