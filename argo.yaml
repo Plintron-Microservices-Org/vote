@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: vote-app
-  namespace: argocd
+  namespace: argocd-1
 spec:
   project: default
 
