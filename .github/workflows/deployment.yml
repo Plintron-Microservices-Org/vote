@@ -1,0 +1,91 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - devtools-actions-sample
+
+on:
+  push:
+    branches:
+      - main
+      - UAT
+  pull_request:
+    branches: 
+      - main
+      - UAT
+  workflow_dispatch:
+
+jobs:
+  build-prod:
+    runs-on: windows-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Build Steps
+        run: echo "Build Steps Here"
+          
+  build-UAT:
+    runs-on: windows-latest
+    if: ${{ github.head_ref	== 'refs/heads/UAT'|| github.ref == 'refs/heads/UAT' }}
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Build Steps
+        run: echo "Build Steps Here"
+        
+  deploy-prod:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: build-prod
+    environment:
+     name: 'Production'
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: us-east-2
+           
+      - name: initalize cluster
+        id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@master
+        with:
+         version: 2  
+      - run: aws eks --region us-east-2 update-kubeconfig --name eks-prod-cluster
+      - run: kubectl apply -f argo.yaml
+      
+  deploy-UAT:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: build-UAT
+    environment:
+     name: 'Production'
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: us-east-2
+           
+      - name: initalize cluster
+        id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@master
+        with:
+         version: 2  
+      - run: aws eks --region us-east-2 update-kubeconfig --name eks-cluster
+      - run: kubectl apply -f argo.yaml
