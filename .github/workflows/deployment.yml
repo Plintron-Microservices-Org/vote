@@ -60,7 +60,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@master
         with:
          version: 2  
-      - run: aws eks --region us-east-2 update-kubeconfig --name eks-prod-cluster
+      - run: aws eks --region us-east-2 update-kubeconfig --name eks-prod
       - run: kubectl apply -f argo.yaml
       
   deploy-UAT:
