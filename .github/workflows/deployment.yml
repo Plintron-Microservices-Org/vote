@@ -1,6 +1,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - devtools-actions-sample
 
-on:
+#on:
   push:
     branches:
       - main
