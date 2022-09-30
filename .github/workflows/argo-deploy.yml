@@ -1,0 +1,104 @@
+name: Docker Publish to Packages
+
+on:
+  push:
+  #  tags:
+  #    - '*'
+   branches:
+     - 'main'
+     - 'UAT'
+     
+permissions: write-all
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  
+jobs:
+
+  build-UAT-docker-image:
+    runs-on: self-hosted
+    if: ${{ github.head_ref	== 'refs/heads/UAT'|| github.ref == 'refs/heads/UAT' }
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag vote:latest
+      
+    - name: Docker Login
+      run: echo ${{ secrets.gh_token }} | docker login ghcr.io -u ${{ secrets.gh_user }} --password-stdin
+      shell: bash
+      
+    - name: Tag Docker Image
+      run: |
+        docker tag vote:latest ghcr.io/plintron-microservices-org/vote:latest
+# ${{ github.repository_owner }}
+    - name: Push Docker Image
+      run: |
+
+    - name: Docker Login
+      run: echo ${{ secrets.gh_token }} | docker login ghcr.io -u ${{ secrets.gh_user }} --password-stdin
+      shell: bash
+          
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+  deploy-UAT-docker-image:
+    runs-on: self-hosted
+    needs: build-UAT-docker-image
+    environment:
+     name: 'UAT'
+    steps:
+    - uses: actions-hub/kubectl@master
+      env:
+       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      with:
+       args: apply -f argo.yaml 
+       
+  build-prod-docker-image:
+    runs-on: self-hosted
+    if: ${{ github.head_ref	== 'refs/heads/UAT'|| github.ref == 'refs/heads/UAT' }
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag vote:latest
+      
+    - name: Docker Login
+      run: echo ${{ secrets.gh_token }} | docker login ghcr.io -u ${{ secrets.gh_user }} --password-stdin
+      shell: bash
+      
+    - name: Tag Docker Image
+      run: |
+        docker tag vote:latest ghcr.io/plintron-microservices-org/vote:latest
+# ${{ github.repository_owner }}
+    - name: Push Docker Image
+      run: |
+
+    - name: Docker Login
+      run: echo ${{ secrets.gh_token }} | docker login ghcr.io -u ${{ secrets.gh_user }} --password-stdin
+      shell: bash
+          
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+  deploy-prod-docker-image:
+    runs-on: self-hosted
+    needs: build-prod-docker-image
+    environment:
+     name: 'UAT'
+    steps:
+    - uses: actions-hub/kubectl@master
+      env:
+       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      with:
+       args: apply -f argo.yaml 
+  
+    
