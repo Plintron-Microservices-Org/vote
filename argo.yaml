@@ -12,7 +12,7 @@ spec:
     path: ./k8s-specifications
   destination: 
     server: https://kubernetes.default.svc
-    namespace: vote
+    namespace: cpaas
 
   syncPolicy:
     syncOptions:
