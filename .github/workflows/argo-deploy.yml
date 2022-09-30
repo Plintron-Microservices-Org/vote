@@ -10,7 +10,7 @@ on:
 jobs:
 
   deploy-UAT-docker-image:
-    runs-on: self-hosted
+    runs-on: plintron
     if: ${{ github.head_ref	== 'refs/heads/UAT'|| github.ref == 'refs/heads/UAT' }}
     steps:
     - uses: actions-hub/kubectl@master
@@ -20,7 +20,7 @@ jobs:
        args: apply -f argo.yaml 
        
   deploy-prod-docker-image:
-    runs-on: self-hosted
+    runs-on: plintron
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
     - uses: actions-hub/kubectl@master
