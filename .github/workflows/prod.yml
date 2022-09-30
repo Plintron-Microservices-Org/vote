@@ -1,6 +1,6 @@
 name: Build and deploy application through ArgoCd
 
-on:
+#on:
   push:
     branches:
       - main
