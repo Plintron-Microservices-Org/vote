@@ -2,8 +2,6 @@ name: Docker Publish to Packages
 
 on:
   push:
-  #  tags:
-  #    - '*'
    branches:
      - 'main'
      - 'UAT'
